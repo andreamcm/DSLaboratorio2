@@ -16,15 +16,13 @@ setwd("C:/Users/DELL/Documents/UVG/VIII_Semestre/Data Science/DSLaboratorio2")
 
 # --------------------
 # Librerias a utilizar
-<<<<<<< HEAD
 # --------------------
-=======
+
 library(dplyr)
 library(ggplot2) 
 library(gmodels)
 library(Hmisc)
 library(ggthemes)
->>>>>>> 9e685883403e982f0ec32db55a8211384c1a714c
 library(class)
 library(caret)
 
@@ -40,13 +38,13 @@ datos_relevantes <- datos[, c("LotArea", "YearRemodAdd", "YearBuilt", "GarageCar
 #Analisis exploratorio con nuevas variables
 summary(datos_relevantes)
 
-#LotFrontage
-hist(datos_relevantes$LotFrontage, col="lightcyan", main="Histograma de LotFrontage")
-qqnorm(datos_relevantes$LotFrontage, main="LotFrontage")
-qqline(datos_relevantes$LotFrontage, col = "red")
-ks.test(datos_relevantes$LotFrontage,rnorm(length(datos_relevantes$LotFrontage)))
+#LotArea
+hist(datos_relevantes$LotArea, col="lightcyan", main="Histograma de LotArea")
+qqnorm(datos_relevantes$LotArea, main="LotArea")
+qqline(datos_relevantes$LotArea, col = "red")
+ks.test(datos_relevantes$LotArea,rnorm(length(datos_relevantes$LotArea)))
 
-#YearRemoAdd
+#YearBuilt
 hist(datos_relevantes$YearBuilt, col="lightcyan", main="Histograma de YearBuilt")
 qqnorm(datos_relevantes$YearBuilt, main="YearBuilt")
 qqline(datos_relevantes$YearBuilt, col = "red")
