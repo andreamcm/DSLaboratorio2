@@ -19,7 +19,8 @@ setwd("C:/Users/DELL/Documents/UVG/VIII_Semestre/Data Science/DSLaboratorio2")
 # --------------------
 
 library(dplyr)
-library(ggplot2) 
+library(ggplot2)
+library(corrplot)
 library(gmodels)
 library(Hmisc)
 library(ggthemes)
@@ -33,7 +34,7 @@ library(caret)
 # --------------------
 datos <- read.csv("train.csv")
 datos_relevantes <- datos[, c("LotArea", "YearRemodAdd", "YearBuilt", "GarageCars", "PoolArea", "YrSold", "SalePrice")]
-
+datos_relevantes <- na.omit(datos_relevantes)
 
 #Analisis exploratorio con nuevas variables
 summary(datos_relevantes)
@@ -80,6 +81,12 @@ qqnorm(datos_relevantes$SalePrice, main="SalePrice")
 qqline(datos_relevantes$SalePrice, col = "red")
 ks.test(datos_relevantes$SalePrice,rnorm(length(datos_relevantes$SalePrice)))
 
+# Analisis de correlacion
+corrcuant <- cor(datos_relevantes, use="complete.obs", method="pearson")
+corrcuant
+corrplot(corrcuant, method = "square")
+
+res2<-rcorr(as.matrix(cuantitativas))
 
 # ----------------------------------------------
 # Separación de datos en entrenamiento y prueba
@@ -124,7 +131,21 @@ dif<-abs(testSet$mpgPred-testSet$mpg)
 
 testSet$mpgPred <-NULL
 
+############
+#KNN
+############
 
+#Now creating seperate dataframe for 'Creditability' feature which is our target.
+trainSet.gc_labels <- trainSet[muestra,1]
+testSet.gc_labels  <- testSet[-muestra,1]   
+
+#trainSet.gc_labels <- na.omit(trainSet.gc_labels)
+
+trainSet.gc_labels
+NROW(trainSet.gc_labels)
+
+knn.26 <-  knn(train=trainSet, test=testSet, cl=trainSet.gc_labels, k=29)
+knn.27 <-  knn(train=trainSet, test=test.gc, cl=testSet.gc_labels, k=30)
 
 
 
