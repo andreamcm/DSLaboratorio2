@@ -147,7 +147,7 @@ trainSet
 #KNN
 ############
 
-#Cartet
+#Caret
 
 #29
 trainSet
@@ -163,6 +163,23 @@ predKnn<-knn(trainSet,testSet,as.factor(trainSet$compar), k = 30)
 cfm<-confusionMatrix(as.factor(testSet$compar),predKnn)
 cfm
 
+
+#Con caret usando validación cruzada
+set.seed(123)
+trctrl <- trainControl(method = "repeatedcv",
+                       number = 10,
+                       repeats = 29)
+
+trainSet$compar<-as.factor(trainSet$compar)
+testSet$compar<-as.factor(testSet$compar)
+
+knnTrain <- train(compar ~., data = trainSet, method = "knn",
+                  trControl=trctrl,
+                  preProcess = c("center", "scale"), tuneLength=10)
+predknn3<-predict(knnTrain,newdata = testSet)
+summary(knnTrain)
+cfm<-confusionMatrix(as.factor(testSet$compar),predKnn3)
+cfm
 
 
 
