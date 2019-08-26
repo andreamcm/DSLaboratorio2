@@ -34,7 +34,7 @@ library(caret)
 # --------------------
 datos <- read.csv("train.csv")
 datos_relevantes <- datos[, c("LotArea", "YearRemodAdd", "YearBuilt", "GarageCars", "PoolArea", "YrSold", "SalePrice")]
-datos_relevantes <- na.omit(datos_relevantes)
+#datos_relevantes <- na.omit(datos_relevantes)
 
 #Analisis exploratorio con nuevas variables
 summary(datos_relevantes)
@@ -132,34 +132,35 @@ dif<-abs(testSet$mpgPred-testSet$mpg)
 testSet$mpgPred <-NULL
 
 ############
+#Variable limite 
+############
+testSet$compar <- cut(testSet$SalePrice, breaks = c(-Inf, 129975, 214000, Inf), 
+              labels = c(1, 2, 3))
+
+testSet
+
+trainSet$compar <- cut(trainSet$SalePrice, breaks = c(-Inf, 129975, 214000, Inf), 
+                      labels = c(1, 2, 3))
+
+trainSet
+############
 #KNN
 ############
 
 #Cartet
-table(trainSet[,1])
-table(testSet[,1])
-
-testSet$SalePrice <- as.factor(testSet$SalePrice)
 
 #29
 trainSet
-predKnn<-knn(trainSet[,-7],testSet[,-7],trainSet$SalePrice,k=29)
-str(predKnn)
-str(as.factor(testSet$SalePrice))
+predKnn<-knn(trainSet,testSet,as.factor(trainSet$compar), k = 29)
 
-levels(testSet$SalePrice) <- levels(predKnn)
-
-cfm<-confusionMatrix(as.factor(testSet$SalePrice),predKnn)
+cfm<-confusionMatrix(as.factor(testSet$compar),predKnn)
 cfm
 
+
 #30
-predKnn<-knn(trainSet[,-7],testSet[,-7],trainSet$SalePrice,k=30)
-str(predKnn)
-str(as.factor(testSet$SalePrice))
+predKnn<-knn(trainSet,testSet,as.factor(trainSet$compar), k = 30)
 
-levels(testSet$SalePrice) <- levels(predKnn)
-
-cfm<-confusionMatrix(as.factor(testSet$SalePrice),predKnn)
+cfm<-confusionMatrix(as.factor(testSet$compar),predKnn)
 cfm
 
 
