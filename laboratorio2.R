@@ -135,17 +135,32 @@ testSet$mpgPred <-NULL
 #KNN
 ############
 
-#Now creating seperate dataframe for 'Creditability' feature which is our target.
-trainSet.gc_labels <- trainSet[muestra,1]
-testSet.gc_labels  <- testSet[-muestra,1]   
+#Cartet
+table(trainSet[,1])
+table(testSet[,1])
 
-#trainSet.gc_labels <- na.omit(trainSet.gc_labels)
+testSet$SalePrice <- as.factor(testSet$SalePrice)
 
-trainSet.gc_labels
-NROW(trainSet.gc_labels)
+#29
+trainSet
+predKnn<-knn(trainSet[,-7],testSet[,-7],trainSet$SalePrice,k=29)
+str(predKnn)
+str(as.factor(testSet$SalePrice))
 
-knn.26 <-  knn(train=trainSet, test=testSet, cl=trainSet.gc_labels, k=29)
-knn.27 <-  knn(train=trainSet, test=test.gc, cl=testSet.gc_labels, k=30)
+levels(testSet$SalePrice) <- levels(predKnn)
+
+cfm<-confusionMatrix(as.factor(testSet$SalePrice),predKnn)
+cfm
+
+#30
+predKnn<-knn(trainSet[,-7],testSet[,-7],trainSet$SalePrice,k=30)
+str(predKnn)
+str(as.factor(testSet$SalePrice))
+
+levels(testSet$SalePrice) <- levels(predKnn)
+
+cfm<-confusionMatrix(as.factor(testSet$SalePrice),predKnn)
+cfm
 
 
 
