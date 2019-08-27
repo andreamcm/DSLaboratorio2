@@ -34,6 +34,7 @@ library(caret)
 # --------------------
 datos <- read.csv("train.csv")
 datos_relevantes <- datos[, c("LotArea", "YearRemodAdd", "YearBuilt", "GarageCars", "PoolArea", "YrSold", "SalePrice")]
+datos_test <- read.csv("sample_submission.csv")
 #datos_relevantes <- na.omit(datos_relevantes)
 
 #Analisis exploratorio con nuevas variables
@@ -98,6 +99,7 @@ muestra<-sample(1:nrow(datos_relevantes),porciento*nrow(datos_relevantes))# Sele
 
 trainSet<-datos_relevantes[muestra,] # Grupo de entrenamiento
 testSet<-datos_relevantes[-muestra,] # Grupo de pruebas
+testKaggle <- testSet
 
 
 
@@ -113,9 +115,28 @@ prediccionRL
 diferencia <- abs(testSet$rlprediccion-testSet$SalePrice)
 diferencia
 
+
 cfmrl <- confusionMatrix(prediccionRL, testSet)
 
+# Con los datos de kaggle
+complete_train <- datos_relevantes
+completeModeloRL <- lm(SalePrice~., data = complete_train)
+summary(completeModeloRL)
 
+prediccionRL <- predict(modeloRL, newdata = testKaggle)
+testKaggle$rlprediccion <- prediccionRL
+
+diferencia_kaggle <- abs(testKaggle$rlprediccion-testKaggle$SalePrice)
+diferencia_kaggle
+
+cfmrl <- confusionMatrix(testKaggle$prediccionRL, testKaggle$SalePrice)
+testKaggle$rlprediccion
+count(testKaggle$rlprediccion)
+testKaggle$SalePrice
+count(testKaggle$SalePrice)
+
+# KNN
+# ---
 #Generación del modelo
 modeloLinealSimple<-lm(mpg~wt, data = trainSet)
 summary(modeloLinealSimple)
